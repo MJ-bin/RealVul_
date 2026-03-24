@@ -2,6 +2,9 @@
 ts_logger
 lightning_logs
 .realvul/
+Experiments/LineVul/checkpoint-*/
+Experiments/LineVul/best_model/
+Experiments/LineVul/juliet-playground/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -213,3 +216,4 @@ __marimo__/
 
 data/
 Dataset/
+.vscode/

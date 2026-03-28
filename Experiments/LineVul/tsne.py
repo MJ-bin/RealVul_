@@ -109,31 +109,75 @@ def plot_paired_embedding(fine_X_org, fine_y, raw_X_org, raw_y, title=None, new=
     plt.figure(figsize=(10, 10), edgecolor='black')
 
     group_specs = [
-        ('Fine-tuned / Non-Vuln', 0, 0, 'o', 'tab:blue'),
-        ('Fine-tuned / Vuln', 0, 1, '^', 'tab:blue'),
-        ('Raw / Non-Vuln', 1, 0, 'o', 'tab:orange'),
-        ('Raw / Vuln', 1, 1, '^', 'tab:orange'),
+        {
+            'label': 'Before Fine-tuned / Vuln',
+            'model_value': 1,
+            'target_value': 1,
+            'marker': 'o',
+            'facecolor': 'tab:red',
+            'edgecolor': 'tab:red',
+            'linewidth': 0.8,
+        },
+        {
+            'label': 'Before Fine-tuned / Non-Vuln',
+            'model_value': 1,
+            'target_value': 0,
+            'marker': 'o',
+            'facecolor': 'tab:blue',
+            'edgecolor': 'tab:blue',
+            'linewidth': 0.8,
+        },
+        {
+            'label': 'After Fine-tuned / Vuln',
+            'model_value': 0,
+            'target_value': 1,
+            'marker': 'o',
+            'facecolor': 'none',
+            'edgecolor': 'tab:red',
+            'linewidth': 1.2,
+        },
+        {
+            'label': 'After Fine-tuned / Non-Vuln',
+            'model_value': 0,
+            'target_value': 0,
+            'marker': 'o',
+            'facecolor': 'none',
+            'edgecolor': 'tab:blue',
+            'linewidth': 1.2,
+        },
     ]
-    for label, model_value, target_value, marker, color in group_specs:
-        mask = (model_source == model_value) & (combined_labels == target_value)
+    for spec in group_specs:
+        mask = (model_source == spec['model_value']) & (combined_labels == spec['target_value'])
         points = X[mask]
         if points.size == 0:
             continue
         plt.scatter(
             points[:, 0],
             points[:, 1],
-            marker=marker,
-            c=color,
-            s=16,
-            linewidth=1.2,
-            label=label,
+            marker=spec['marker'],
+            facecolors=spec['facecolor'],
+            edgecolors=spec['edgecolor'],
+            c=None,
+            s=72,
+            linewidths=spec['linewidth'],
+            label=spec['label'],
         )
 
     plt.xticks([]), plt.yticks([])
     if title is not None:
         plt.title("")
-    plt.legend(frameon=False)
-    plt.tight_layout()
+    plt.legend(
+        frameon=False,
+        loc='lower center',
+        bbox_to_anchor=(0.5, 1.03),
+        ncol=4,
+        borderaxespad=0.0,
+        fontsize=13,
+        markerscale=1.8,
+        handletextpad=0.6,
+        columnspacing=1.4,
+    )
+    plt.tight_layout(rect=(0, 0, 1, 0.9))
     plt.savefig(str(title) + '.jpeg', dpi=1000)
     plt.close()
 
